@@ -1,51 +1,76 @@
+<!DOCTYPE html>
 <html>
 
 <head>
     <title>Msat7's Website</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #333;
-        }
-
-        li {
-            float: left;
-        }
-
-        li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-
-        li a:hover:not(.active) {
-            background-color: #111;
-        }
-
-        .active {
-            background-color: #4CAF50;
-        }
-    </style>
 </head>
 
 <body>
     <header>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="rps/rpsGame.html">RPS Game</a></li>
-            <li><a href="hc/hcGame.html">HC Game</a></li>
-            <li><a href="old_webpage/old_webpage.html">Old Website</a></li>
-        </ul>
+        <div class="navbar">
+            <a href="index.html">Home</a>
+            <a href="rps/rpsGame.html">Rock Paper Scissors</a>
+            <a href="hc/hcGame.html">Hand Cricket</a>
+            <a href="old_webpage/old_website.html">Old Website</a>
+            <a href="http://manusatyan.com">New Website</a>
+            <a href="http://manusatyan.com/contact" class="right">Contact MSat7</a>
+            <!-- <a href="http://manusatyan.com" class="right">New Website</a> -->
+        </div>
     </header>
+    <div class="row">
 
-    <h1>Website Is Under Construction</h1>
-    <h3>Please check back later.</h3>
+        <div class="main">
+            <h1 id="welcome-message-heading"></h1>
+
+            <p>Chances are, you already know who I am since you've found my website. If not, Hi! I'm Manu Satyan.
+                I'd recommend checking out my primary website first and then coming back here. You can get to it by
+                <a href="http://manusatyan.com">clicking here</a> or by clicking on the "New Website" button on the
+                navigation bar above.
+            </p>
+            <p>
+                I primarily use this website for testing new stuff that I'm developing and to put things that I can't
+                or don't want to put on my primary website. Feel free to check out my currently developed projects by
+                clicking on their respective tabs above. I'll keep adding new tabs for new projects so make sure to
+                visit often!
+            </p>
+            <p>
+                If you have a cool new idea that you think I should work on or have a question, comment, or query,
+                feel free to drop a message by tapping on the contact me button on the navbar above!
+                Thanks for Visiting! &nbsp; 😃 
+            </p>
+            <p>
+                <i>#BeTheChange</i>
+                <br><i>#BeKindToOneAnother</i>
+            </p>
+        </div>
+
+        <div class="side">
+            A JOKE GOES HERE.
+        </div>
+    </div>
+
+    <div class="footer">
+        <h3>Developed by MSat7.</h3>
+        <h5>Copyright © 2019. All Rights Reserved.</h5>
+    </div>
+
+    <script>
+        var i = 0;
+        var heading = "Hey There! Welcome to my playground!";
+        var speed = 50;
+
+        function typeWriterHeading() {
+            if (i < heading.length) {
+                document.getElementById("welcome-message-heading").innerHTML += heading.charAt(i);
+                i++;
+                setTimeout(typeWriterHeading, speed);
+            }
+        }
+
+        window.onload = typeWriterHeading;
+
+    </script>
 </body>
 
 </html>
