@@ -1,0 +1,87 @@
+<!-- This is the index.html file-->
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Rock Paper Scissors!</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: rgb(3, 0, 51);
+        }
+
+        li {
+            float: left;
+        }
+
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        li a:hover:not(.active) {
+            background-color: #111;
+        }
+
+        .active {
+            background-color: #4CAF50;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="rps/rpsGame.html">RPS Game</a></li>
+            <li><a href="hc/hcGame.html">HC Game</a></li>
+            <li><a href="old_webpage/old_webpage.html">Old Website</a></li>
+        </ul>
+    </header>
+    <header>
+        <h1>Rock. Paper. Scissors.</h1>
+        <h3>Game On!</h3>
+    </header>
+
+    <div class="score-board">
+        <div id="user-label" class="badge">Player 1</div>
+        <div id="computer-label" class="badge">Computer</div>
+        <span id="user-score">0</span> &nbsp; : &nbsp; <span id="computer-score">0</span>
+    </div>
+
+    <div class="result">
+        <h3>You dare challenge me?!</h3>
+        <p>You're going down.</p>
+    </div>
+
+    <div class="choices">
+        <div id="r" class="choice">
+            <img src="images/rock.png" alt="Rock_Image">
+        </div>
+
+        <div id="p" class="choice">
+            <img src="images/paper.png" alt="Rock_Image">
+        </div>
+
+        <div id="s" class="choice">
+            <img src="images/scissors.png" alt="Rock_Image">
+        </div>
+
+        <p id="action-message">Your Move.</p>
+    </div>
+    <script src="app.js" charset="utf-8"></script>
+</body>
+<footer>
+    <h3>Developed by MSat7.</h3>
+    <h5>Copyright © 2019. All Rights Reserved.</h5>
+</footer>
+
+</html>
