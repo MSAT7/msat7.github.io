@@ -7,6 +7,7 @@ var batsman = 'player';
 var target = null;
 var winCounter = 0;
 var loseCounter = 0;
+var firstBatting = 'player';
 
 // Caching References (For efficency purposes)
 const userScore_span = document.getElementById("user-score");
@@ -30,6 +31,99 @@ function getComputerChoice() {
     return choices[randomNumber];
 }
 
+function coinToss() {
+
+}
+
+function checkDuckOut() {
+
+    if (batsmanScore === 0) {
+        return 'duck'
+    } else {
+        return 'goose'
+    }
+}
+
+function disableButtons() {
+
+    one_div.style.visibility = "hidden";
+    one_div.style.opacity = '0';
+    one_div.style.transition = "visibility 0.3s linear,opacity 0.3s linear";
+
+    two_div.style.visibility = "hidden";
+    two_div.style.opacity = '0';
+    two_div.style.transition = "visibility 0.3s linear,opacity 0.3s linear";
+
+    three_div.style.visibility = "hidden";
+    three_div.style.opacity = '0';
+    three_div.style.transition = "visibility 0.3s linear,opacity 0.3s linear";
+
+    four_div.style.visibility = "hidden";
+    four_div.style.opacity = '0';
+    four_div.style.transition = "visibility 0.3s linear,opacity 0.3s linear";
+
+    five_div.style.visibility = "hidden";
+    five_div.style.opacity = '0';
+    five_div.style.transition = "visibility 0.3s linear,opacity 0.3s linear";
+
+    six_div.style.visibility = "hidden";
+    six_div.style.opacity = '0';
+    six_div.style.transition = "visibility 0.3s linear,opacity 0.3s linear";
+}
+
+function enableButtons() {
+    one_div.style.visibility = "visible";
+    one_div.style.opacity = '1';
+    one_div.style.transition = "visibility 0.3s linear,opacity 0.3s linear";
+
+    two_div.style.visibility = "visible";
+    two_div.style.opacity = '1';
+    two_div.style.transition = "visibility 0.3s linear,opacity 0.3s linear";
+
+    three_div.style.visibility = "visible";
+    three_div.style.opacity = '1';
+    three_div.style.transition = "visibility 0.3s linear,opacity 0.3s linear";
+
+    four_div.style.visibility = "visible";
+    four_div.style.opacity = '1';
+    four_div.style.transition = "visibility 0.3s linear,opacity 0.3s linear";
+
+    five_div.style.visibility = "visible";
+    five_div.style.opacity = '1';
+    five_div.style.transition = "visibility 0.3s linear,opacity 0.3s linear";
+
+    six_div.style.visibility = "visible";
+    six_div.style.opacity = '1';
+    six_div.style.transition = "visibility 0.3s linear,opacity 0.3s linear";
+
+}
+
+function gameReset() {
+    userScore = 0;
+    computerScore = 0;
+    batsmanScore = 0;
+    batsman = 'player';
+    target = null;
+    firstBatting = 'player';
+
+    disableButtons();
+    showHideCountdown();
+
+
+    setTimeout(function () {
+        userScore_span.innerHTML = 0;
+        showHideCountdown()
+    }, 3000);
+    setTimeout(function () {
+        computerScore_span.innerHTML = 0;
+        result_h3.innerHTML = "Good Luck!";
+        result_p.innerHTML = "New Match Started.";
+        enableButtons();
+    }, 3000);
+
+    console.log("New Match Started!");
+}
+
 function converter(choice) {
     if (choice === "1") return "Singles";
     if (choice === "2") return "Doubles";
@@ -45,7 +139,7 @@ function checkForWinner(batsmanScore) {
     return false
 }
 
-function userWins(userChoice, computerChoice, batsmanScore) {
+function userWins(batsmanScore) {
     console.log("USER WINS!");
 
     var diff = target - batsmanScore;
@@ -59,28 +153,11 @@ function userWins(userChoice, computerChoice, batsmanScore) {
 
     win_counter_message_p.innerHTML = " Won: " + winCounter + " &nbsp; Lost: " + loseCounter;
 
-    showHideCountdown();
+    gameReset();
 
-    userScore = 0;
-    computerScore = 0;
-    batsmanScore = 0;
-    batsman = 'player';
-    target = null;
-
-    setTimeout(function () { 
-        userScore_span.innerHTML = 0;
-        showHideCountdown()
-    }, 5000);
-    setTimeout(function () {
-        computerScore_span.innerHTML = 0;
-        result_h3.innerHTML = "Good Luck!";
-        result_p.innerHTML = "New Match Started.";
-    }, 5000);
-
-    console.log("New Match Started!");
 }
 
-function computerWins(userChoice, computerChoice, batsmanScore) {
+function computerWins(batsmanScore) {
     console.log("COMPUTER WINS!");
 
     var diff = target - batsmanScore;
@@ -94,74 +171,82 @@ function computerWins(userChoice, computerChoice, batsmanScore) {
 
     win_counter_message_p.innerHTML = " Won: " + winCounter + " &nbsp; Lost: " + loseCounter;
 
-    userScore = 0;
-    computerScore = 0;
-    batsmanScore = 0;
-    batsman = 'player';
-    target = null;
-
-    showHideCountdown();
-
-    setTimeout(function () { 
-        userScore_span.innerHTML = 0;
-        showHideCountdown()
-    }, 5000);
-    setTimeout(function () {
-        computerScore_span.innerHTML = 0;
-        result_h3.innerHTML = "Good Luck!";
-        result_p.innerHTML = "New Match Started.";
-    }, 5000);
-
-
-    console.log("New Match Started!");
+    gameReset();
 }
 
-function draw(userChoice) {
+function draw() {
+
     console.log("IT IS A DRAW.");
+
+    if (batsmanScore === target-1 || (batsman === 'computer' && target === null)) {
+        return 'draw';
+    } else {
+        return 'nope';
+    }
 }
 
-function batsmanOut(userChoice, computerChoice, batsmanScore) {
+function batsmanOut(userChoice, batsmanScore) {
 
     console.log("Batsman Out.");
 
     const userChoice_div = document.getElementById(userChoice);
 
     userChoice_div.classList.add('red-glow');
+
     setTimeout(function () { userChoice_div.classList.remove('red-glow') }, 500);
 
-    if (target !== null && batsman === 'player') {
-
-        if (checkForWinner(batsmanScore) === 'playerWins') {
-            userWins(userChoice, computerChoice, batsmanScore);
-        } else {
-            computerWins(userChoice, computerChoice, batsmanScore);
-        }
-    } else if (target !== null && batsman === 'computer') {
-
-        if (checkForWinner(batsmanScore) === 'computerWins') {
-            computerWins(userChoice, computerChoice, batsmanScore);
-        } else {
-            userWins(userChoice, computerChoice, batsmanScore);
-        }
+    if (draw() === 'draw') {
+        result_h3.innerHTML = "Draw!"
+        result_p.innerHTML = "No points awarded for this match.";
+        gameReset();
     } else {
-        target = batsmanScore + 1;
+        if (target !== null && batsman === 'player') {
 
-        if (batsman === 'player') {
-            batsman = 'computer'
-            console.log("Computer is now batting.");
+            if (checkForWinner(batsmanScore) === 'playerWins') {
+                userWins(batsmanScore);
+            } else {
+                computerWins(batsmanScore);
+            }
+        } else if (target !== null && batsman === 'computer') {
+
+            if (checkForWinner(batsmanScore) === 'computerWins') {
+                computerWins(batsmanScore);
+            } else {
+                userWins(batsmanScore);
+            }
         } else {
-            batsman = 'player'
-            console.log("Player is now batting.");
+            target = batsmanScore + 1;
+
+            batsmanScore = 0;
+
+            var duckOut = checkDuckOut();
+
+            if (batsman === 'player') {
+                batsman = 'computer'
+                bowler = 'player'
+                console.log("Computer is now batting.");
+            } else {
+                batsman = 'player'
+                bowler = 'computer'
+                console.log("Player is now batting.");
+            }
+
+            if (duckOut == 'duck') {
+                result_h3.innerHTML = "🦆 OUT!"
+                result_p.innerHTML = batsman + " needs 1 run to win!";
+            } else {
+                result_h3.innerHTML = "Howazzat!"
+                result_p.innerHTML = batsman + " needs " + target + " runs to win!";
+            }
+            console.log(batsman + " needs " + target + " to win.");
         }
-
-        result_h3.innerHTML = "Howazzat!"
-        result_p.innerHTML = batsman + " needs " + target + " runs to win!";
-
-        console.log(batsman + " needs " + target + " to win.");
     }
 }
 
 function scoreRuns(userChoice, computerChoice) {
+    
+    firstBatting = 'player';
+
     if (batsman === 'player') {
         userScore += parseInt(userChoice);
         result_h3.innerHTML = converter(userChoice);
@@ -177,7 +262,7 @@ function scoreRuns(userChoice, computerChoice) {
         console.log("Player Score: " + userScore);
         //console.log("Batsman Score: " + batsmanScore);
         if (checkForWinner(batsmanScore) === 'playerWins') {
-            userWins(userChoice, computerChoice, batsmanScore);
+            userWins(batsmanScore);
         }
     } else {
         computerScore += parseInt(computerChoice);
@@ -188,7 +273,7 @@ function scoreRuns(userChoice, computerChoice) {
         console.log("Computer Score: " + computerScore);
         //console.log("Batsman Score: " + batsmanScore);
         if (checkForWinner(batsmanScore) === 'computerWins') {
-            computerWins(userChoice, computerChoice, batsmanScore);
+            computerWins(batsmanScore);
         }
     }
 }
@@ -198,7 +283,7 @@ function getWinner(userChoice, computerChoice, batsmanScore) {
     switch (userChoice + "-" + computerChoice) {
 
         case "1-1":
-            batsmanOut(userChoice, computerChoice, batsmanScore);
+            batsmanOut(userChoice, batsmanScore);
             batsmanScore = 0;
             break;
         case "1-2":
@@ -213,7 +298,7 @@ function getWinner(userChoice, computerChoice, batsmanScore) {
             scoreRuns(userChoice, computerChoice);
             break;
         case "2-2":
-            batsmanOut(userChoice, computerChoice, batsmanScore);
+            batsmanOut(userChoice, batsmanScore);
             batsmanScore = 0;
             break;
         case "2-3":
@@ -228,7 +313,7 @@ function getWinner(userChoice, computerChoice, batsmanScore) {
             scoreRuns(userChoice, computerChoice);
             break;
         case "3-3":
-            batsmanOut(userChoice, computerChoice, batsmanScore);
+            batsmanOut(userChoice, batsmanScore);
             batsmanScore = 0;
             break;
         case "3-4":
@@ -243,7 +328,7 @@ function getWinner(userChoice, computerChoice, batsmanScore) {
             scoreRuns(userChoice, computerChoice);
             break;
         case "4-4":
-            batsmanOut(userChoice, computerChoice, batsmanScore);
+            batsmanOut(userChoice, batsmanScore);
             batsmanScore = 0;
             break;
         case "4-5":
@@ -258,7 +343,7 @@ function getWinner(userChoice, computerChoice, batsmanScore) {
             scoreRuns(userChoice, computerChoice);
             break;
         case "5-5":
-            batsmanOut(userChoice, computerChoice, batsmanScore);
+            batsmanOut(userChoice, batsmanScore);
             batsmanScore = 0;
             break;
         case "5-6":
@@ -273,7 +358,7 @@ function getWinner(userChoice, computerChoice, batsmanScore) {
             scoreRuns(userChoice, computerChoice);
             break;
         case "6-6":
-            batsmanOut(userChoice, computerChoice, batsmanScore);
+            batsmanOut(userChoice, batsmanScore);
             batsmanScore = 0;
             break;
     }
@@ -292,12 +377,12 @@ function hcGame(userChoice) {
 
 function countdownTimer() {
     var countdownNumberEl = document.getElementById('countdown-number');
-    var countdown = 5;
+    var countdown = 3;
 
     countdownNumberEl.textContent = countdown;
 
     setInterval(function () {
-        countdown = --countdown <= 0 ? 5 : countdown;
+        countdown = --countdown <= 0 ? 3 : countdown;
 
         countdownNumberEl.textContent = countdown;
     }, 1000);
@@ -306,11 +391,11 @@ function countdownTimer() {
 function showHideCountdown() {
     var x = document.getElementById("countdown");
     if (x.style.display === "none") {
-      x.style.display = "block";
+        x.style.display = "block";
     } else {
-      x.style.display = "none";
+        x.style.display = "none";
     }
-  }
+}
 
 function main() {
 
@@ -318,7 +403,7 @@ function main() {
 
     win_counter_message_p.innerHTML = " Won: " + winCounter + " &nbsp; Lost: " + loseCounter;
 
-    setTimeout(function () {result_p.innerHTML = "Player is Batting first"}, 1000);
+    setTimeout(function () { result_p.innerHTML = "Player is Batting first" }, 1000);
 
     one_div.addEventListener('click', function () {
         //console.log("One was clicked!");
