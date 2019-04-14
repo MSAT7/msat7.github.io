@@ -163,7 +163,7 @@ footer > h5 {
     stroke-width: 2px;
     stroke: #15ff00;
     fill: none;
-    animation: countdown 3s linear infinite forwards;
+    animation: countdown 5s linear infinite forwards;
   }
   
   @keyframes countdown {

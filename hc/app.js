@@ -137,7 +137,7 @@ function tossManager(userCoin) {
         var compChoice = getComputerTossChoice();
         result_h3.innerHTML = "Computer won the toss!";
         result_p.innerHTML = "Computer chooses to " + compChoice + " first!";
-
+        
         if (compChoice === 'bat') {
             batsman = 'computer';
             firstBatting = 'computer';
@@ -223,13 +223,13 @@ function gameReset() {
     firstBatting = null;
 
     disableButtons();
-    hideGameOptions();
+    setTimeout(function() {hideGameOptions();}, 400);
     showHideCountdown();
 
     setTimeout(function () {
         userScore_span.innerHTML = 0;
         computerScore_span.innerHTML = 0;
-    }, 3000);
+    }, 5000);
 
     setTimeout(function () {
         enableButtons();
@@ -237,7 +237,7 @@ function gameReset() {
         showTossOptions();
         result_h3.innerHTML = "Good Job on that match.";
         result_p.innerHTML = "Now pick a side.";
-    }, 3000);
+    }, 5000);
 
     console.log("New Match Started!");
 }
@@ -251,21 +251,35 @@ function converter(choice) {
     return "Sixer!"
 }
 
-function checkForWinner(batsmanScore) {
+function checkForWinner() {
     if (batsman === 'player' && target !== null && batsmanScore >= target) return 'playerWins';
     if (batsman === 'computer' && target !== null && batsmanScore >= target) return 'computerWins';
     return false
 }
 
-function userWins(batsmanScore) {
+function userWins() {
     console.log("USER WINS!");
 
     var diff = target - batsmanScore;
-    if (diff < 1)
+    console.log("DIFF IS: " + diff)
+    console.log("TARG IS: " + target)
+    console.log("BATS IS: " + batsmanScore)
+    if (diff < 1) {
         diff = diff * -1;
+    }
+
+    if (diff === 0) {
+        diff = 1;
+    }
 
     result_h3.innerHTML = "You Win. 💩";
-    result_p.innerHTML = "Player won by " + diff + " runs!";
+
+    if (diff === 1) {
+        result_p.innerHTML = "Player won by " + diff + " run!";
+    } else {
+        result_p.innerHTML = "Player won by " + diff + " runs!";
+    }
+
 
     winCounter++;
 
@@ -275,15 +289,28 @@ function userWins(batsmanScore) {
 
 }
 
-function computerWins(batsmanScore) {
+function computerWins() {
     console.log("COMPUTER WINS!");
 
     var diff = target - batsmanScore;
-    if (diff < 1)
+    console.log("DIFF IS: " + diff)
+    console.log("TARG IS: " + target)
+    console.log("BATS IS: " + batsmanScore)
+    if (diff < 1) {
         diff = diff * -1;
+    }
+
+    if (diff === 0) {
+        diff = 1;
+    }
+
 
     result_h3.innerHTML = "You Lose! 🔥"
-    result_p.innerHTML = "Computer won by " + diff + " runs!";
+    if (diff === 1) {
+        result_p.innerHTML = "Computer won by " + diff + " run!";
+    } else {
+        result_p.innerHTML = "Computer won by " + diff + " runs!";
+    }
 
     loseCounter++;
 
@@ -294,7 +321,9 @@ function computerWins(batsmanScore) {
 
 function draw() {
 
-    if (target !== null && (batsmanScore === target - 1)) {
+    if (target !== null && (batsmanScore === target - 1) && (firstBatting !== batsman)) {
+        console.log("TARGET FROM DRAW IS: " + target)
+        console.log("BATSCORE FROM DRAW IS: " + batsmanScore)
         console.log("IT IS A DRAW.");
         return 'draw';
     } else {
@@ -302,15 +331,11 @@ function draw() {
     }
 }
 
-function batsmanOut(userChoice, batsmanScore) {
+function batsmanOut(userChoice) {
 
     console.log("Batsman Out.");
 
-    const userChoice_div = document.getElementById(userChoice);
-
-    userChoice_div.classList.add('red-glow');
-
-    setTimeout(function () { userChoice_div.classList.remove('red-glow') }, 500);
+    var duckOut = checkDuckOut();
 
     if (draw() === 'draw') {
         result_h3.innerHTML = "Draw!"
@@ -319,32 +344,46 @@ function batsmanOut(userChoice, batsmanScore) {
     } else {
         if (target !== null && batsman === 'player') {
 
-            if (checkForWinner(batsmanScore) === 'playerWins') {
-                userWins(batsmanScore);
+            const userChoice_div = document.getElementById(userChoice);
+            userChoice_div.classList.add('red-glow');
+            setTimeout(function () { userChoice_div.classList.remove('red-glow') }, 500);
+
+            if (checkForWinner() === 'playerWins') {
+                userWins();
             } else {
-                computerWins(batsmanScore);
+                computerWins();
             }
         } else if (target !== null && batsman === 'computer') {
 
-            if (checkForWinner(batsmanScore) === 'computerWins') {
-                computerWins(batsmanScore);
+            const userChoice_div = document.getElementById(userChoice);
+            userChoice_div.classList.add('green-glow');
+            setTimeout(function () { userChoice_div.classList.remove('green-glow') }, 500);
+
+            if (checkForWinner() === 'computerWins') {
+                computerWins();
             } else {
-                userWins(batsmanScore);
+                userWins();
             }
         } else {
             target = batsmanScore + 1;
 
             batsmanScore = 0;
 
-            var duckOut = checkDuckOut();
-
             if (batsman === 'player') {
+
+                const userChoice_div = document.getElementById(userChoice);
+                userChoice_div.classList.add('red-glow');
+                setTimeout(function () { userChoice_div.classList.remove('red-glow') }, 500);
                 batsman = 'computer'
-                bowler = 'player'
+
                 console.log("Computer is now batting.");
             } else {
+
+                const userChoice_div = document.getElementById(userChoice);
+                userChoice_div.classList.add('green-glow');
+                setTimeout(function () { userChoice_div.classList.remove('green-glow') }, 500);
                 batsman = 'player'
-                bowler = 'computer'
+
                 console.log("Player is now batting.");
             }
 
@@ -353,7 +392,7 @@ function batsmanOut(userChoice, batsmanScore) {
                 result_p.innerHTML = batsman + " needs 1 run to win!";
             } else {
                 result_h3.innerHTML = "Howazzat!"
-                result_p.innerHTML = batsman + " needs " + target + " runs to win!";
+                result_p.innerHTML = "Target: " + target;
             }
             console.log(batsman + " needs " + target + " to win.");
         }
@@ -362,45 +401,47 @@ function batsmanOut(userChoice, batsmanScore) {
 
 function scoreRuns(userChoice, computerChoice) {
 
-    firstBatting = 'player';
-
     if (batsman === 'player') {
         userScore += parseInt(userChoice);
         result_h3.innerHTML = converter(userChoice);
-        result_p.innerHTML = "";
-        if (parseInt(userChoice) === 4 || parseInt(userChoice) === 6) {
-            const userChoice_div = document.getElementById(userChoice);
-            userChoice_div.classList.add('green-glow');
-            setTimeout(function () { userChoice_div.classList.remove('green-glow') }, 500);
-        }
+
+        // if (parseInt(userChoice) === 4 || parseInt(userChoice) === 6) {
+        const userChoice_div = document.getElementById(userChoice);
+        userChoice_div.classList.add('green-glow');
+        setTimeout(function () { userChoice_div.classList.remove('green-glow') }, 500);
+        //}
 
         batsmanScore = userScore;
         userScore_span.innerHTML = userScore;
         console.log("Player Score: " + userScore);
         //console.log("Batsman Score: " + batsmanScore);
-        if (checkForWinner(batsmanScore) === 'playerWins') {
-            userWins(batsmanScore);
+        if (checkForWinner() === 'playerWins') {
+            userWins();
         }
     } else {
         computerScore += parseInt(computerChoice);
         result_h3.innerHTML = converter(computerChoice);
-        result_p.innerHTML = "";
+
+        const userChoice_div = document.getElementById(userChoice);
+        userChoice_div.classList.add('red-glow');
+        setTimeout(function () { userChoice_div.classList.remove('red-glow') }, 500);
+
         batsmanScore = computerScore;
         computerScore_span.innerHTML = computerScore;
         console.log("Computer Score: " + computerScore);
         //console.log("Batsman Score: " + batsmanScore);
-        if (checkForWinner(batsmanScore) === 'computerWins') {
-            computerWins(batsmanScore);
+        if (checkForWinner() === 'computerWins') {
+            computerWins();
         }
     }
 }
 
-function getWinner(userChoice, computerChoice, batsmanScore) {
+function getWinner(userChoice, computerChoice) {
 
     switch (userChoice + "-" + computerChoice) {
 
         case "1-1":
-            batsmanOut(userChoice, batsmanScore);
+            batsmanOut(userChoice);
             batsmanScore = 0;
             break;
         case "1-2":
@@ -415,7 +456,7 @@ function getWinner(userChoice, computerChoice, batsmanScore) {
             scoreRuns(userChoice, computerChoice);
             break;
         case "2-2":
-            batsmanOut(userChoice, batsmanScore);
+            batsmanOut(userChoice);
             batsmanScore = 0;
             break;
         case "2-3":
@@ -430,7 +471,7 @@ function getWinner(userChoice, computerChoice, batsmanScore) {
             scoreRuns(userChoice, computerChoice);
             break;
         case "3-3":
-            batsmanOut(userChoice, batsmanScore);
+            batsmanOut(userChoice);
             batsmanScore = 0;
             break;
         case "3-4":
@@ -445,7 +486,7 @@ function getWinner(userChoice, computerChoice, batsmanScore) {
             scoreRuns(userChoice, computerChoice);
             break;
         case "4-4":
-            batsmanOut(userChoice, batsmanScore);
+            batsmanOut(userChoice);
             batsmanScore = 0;
             break;
         case "4-5":
@@ -460,7 +501,7 @@ function getWinner(userChoice, computerChoice, batsmanScore) {
             scoreRuns(userChoice, computerChoice);
             break;
         case "5-5":
-            batsmanOut(userChoice, batsmanScore);
+            batsmanOut(userChoice);
             batsmanScore = 0;
             break;
         case "5-6":
@@ -475,7 +516,7 @@ function getWinner(userChoice, computerChoice, batsmanScore) {
             scoreRuns(userChoice, computerChoice);
             break;
         case "6-6":
-            batsmanOut(userChoice, batsmanScore);
+            batsmanOut(userChoice);
             batsmanScore = 0;
             break;
     }
@@ -488,7 +529,7 @@ function hcGame(userChoice) {
     console.log("User chose: " + userChoice);
     console.log("Computer chose: " + computerChoice);
 
-    getWinner(userChoice, computerChoice, batsmanScore);
+    getWinner(userChoice, computerChoice);
 
 }
 
