@@ -3,11 +3,11 @@
 var userScore = 0;
 var computerScore = 0;
 var batsmanScore = 0;
-var batsman = 'player';
+var batsman = null;
 var target = null;
 var winCounter = 0;
 var loseCounter = 0;
-var firstBatting = 'player';
+var firstBatting = null;
 
 // Caching References (For efficency purposes)
 const userScore_span = document.getElementById("user-score");
@@ -25,6 +25,12 @@ const four_div = document.getElementById("4");
 const five_div = document.getElementById("5");
 const six_div = document.getElementById("6");
 
+const heads_div = document.getElementById("heads");
+const tails_div = document.getElementById("tails");
+
+const bat_div = document.getElementById("bat");
+const bowl_div = document.getElementById("bowl");
+
 function getComputerChoice() {
     const choices = ['1', '2', '3', '4', '5', '6'];
     const randomNumber = Math.floor(Math.random() * 6);
@@ -33,6 +39,116 @@ function getComputerChoice() {
 
 function coinToss() {
 
+    const choices = ["heads", "tails"];
+    const randomNumber = Math.floor(Math.random() * 2);
+
+    return choices[randomNumber];
+}
+
+function getComputerTossChoice() {
+    const choices = ["bat", "bowl"];
+    const randomNumber = Math.floor(Math.random() * 2);
+
+    return choices[randomNumber];
+}
+
+function showWinnerOptions() {
+
+    bat_div.style.display = "inline-block";
+    bowl_div.style.display = "inline-block";
+}
+
+function showGameOptions() {
+
+    one_div.style.display = "inline-block";
+    two_div.style.display = "inline-block";
+    three_div.style.display = "inline-block";
+    four_div.style.display = "inline-block";
+    five_div.style.display = "inline-block";
+    six_div.style.display = "inline-block";
+
+}
+
+function hideGameOptions() {
+
+    one_div.style.display = "none";
+    two_div.style.display = "none";
+    three_div.style.display = "none";
+    four_div.style.display = "none";
+    five_div.style.display = "none";
+    six_div.style.display = "none";
+
+}
+
+function hideWinnerOptions() {
+
+    bat_div.style.display = "none";
+    bowl_div.style.display = "none";
+
+}
+
+function hideTossOptions() {
+
+    heads_div.style.display = "none";
+    tails_div.style.display = "none";
+}
+
+function showTossOptions() {
+
+    heads_div.style.display = "inline-block";
+    tails_div.style.display = "inline-block";
+}
+
+function tossManager(userCoin) {
+
+    var toss = coinToss();
+
+    if (userCoin === "bat") {
+
+        hideWinnerOptions();
+        showGameOptions();
+
+        batsman = 'player';
+        firstBatting = 'player';
+
+        result_h3.innerHTML = "Player 1 chose to bat.";
+        result_p.innerHTML = "You're going down!";
+
+    } else if (userCoin === "bowl") {
+
+        hideWinnerOptions();
+        showGameOptions();
+
+        batsman = 'computer';
+        firstBatting = 'computer';
+
+        result_h3.innerHTML = "Player 1 chose to bowl.";
+        result_p.innerHTML = "You're going down!";
+
+    } else if (toss === userCoin) {
+        result_h3.innerHTML = "Player 1 has won the toss!";
+        result_p.innerHTML = "Bowl or Bat?";
+
+        hideTossOptions();
+        showWinnerOptions();
+
+    } else {
+
+        var compChoice = getComputerTossChoice();
+        result_h3.innerHTML = "Computer won the toss!";
+        result_p.innerHTML = "Computer chooses to " + compChoice + " first!";
+
+        if (compChoice === 'bat') {
+            batsman = 'computer';
+            firstBatting = 'computer';
+        } else {
+            batsman = 'player';
+            firstBatting = 'player';
+        }
+
+        hideTossOptions();
+        showGameOptions();
+    }
 }
 
 function checkDuckOut() {
@@ -102,23 +218,25 @@ function gameReset() {
     userScore = 0;
     computerScore = 0;
     batsmanScore = 0;
-    batsman = 'player';
+    batsman = null;
     target = null;
-    firstBatting = 'player';
+    firstBatting = null;
 
     disableButtons();
+    hideGameOptions();
     showHideCountdown();
-
 
     setTimeout(function () {
         userScore_span.innerHTML = 0;
-        showHideCountdown()
-    }, 3000);
-    setTimeout(function () {
         computerScore_span.innerHTML = 0;
-        result_h3.innerHTML = "Good Luck!";
-        result_p.innerHTML = "New Match Started.";
+    }, 3000);
+
+    setTimeout(function () {
         enableButtons();
+        showHideCountdown();
+        showTossOptions();
+        result_h3.innerHTML = "Good Job on that match.";
+        result_p.innerHTML = "Now pick a side.";
     }, 3000);
 
     console.log("New Match Started!");
@@ -176,9 +294,8 @@ function computerWins(batsmanScore) {
 
 function draw() {
 
-    console.log("IT IS A DRAW.");
-
-    if (batsmanScore === target-1 || (batsman === 'computer' && target === null)) {
+    if (target !== null && (batsmanScore === target - 1)) {
+        console.log("IT IS A DRAW.");
         return 'draw';
     } else {
         return 'nope';
@@ -244,7 +361,7 @@ function batsmanOut(userChoice, batsmanScore) {
 }
 
 function scoreRuns(userChoice, computerChoice) {
-    
+
     firstBatting = 'player';
 
     if (batsman === 'player') {
@@ -366,7 +483,7 @@ function getWinner(userChoice, computerChoice, batsmanScore) {
 
 function hcGame(userChoice) {
 
-    const computerChoice = getComputerChoice();
+    const computerChoice = '4';
 
     console.log("User chose: " + userChoice);
     console.log("Computer chose: " + computerChoice);
@@ -400,10 +517,36 @@ function showHideCountdown() {
 function main() {
 
     showHideCountdown();
+    hideGameOptions();
+    hideWinnerOptions();
+    showTossOptions();
+
+    result_h3.innerHTML = "Ready Player One.";
+    result_p.innerHTML = "Pick a side.";
 
     win_counter_message_p.innerHTML = " Won: " + winCounter + " &nbsp; Lost: " + loseCounter;
 
-    setTimeout(function () { result_p.innerHTML = "Player is Batting first" }, 1000);
+    //setTimeout(function () { result_p.innerHTML = "Player is Batting first" }, 1000);
+
+    heads_div.addEventListener('click', function () {
+        //console.log("Heads was chosen!")
+        tossManager("heads");
+    })
+
+    tails_div.addEventListener('click', function () {
+        //console.log("Tails was chosen!")
+        tossManager("tails");
+    })
+
+    bat_div.addEventListener('click', function () {
+        //console.log("Player chose to bat")
+        tossManager("bat");
+    })
+
+    bowl_div.addEventListener('click', function () {
+        //console.log("Player chose to bat")
+        tossManager("bowl");
+    })
 
     one_div.addEventListener('click', function () {
         //console.log("One was clicked!");
