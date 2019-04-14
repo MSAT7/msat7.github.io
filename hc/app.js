@@ -483,7 +483,7 @@ function getWinner(userChoice, computerChoice, batsmanScore) {
 
 function hcGame(userChoice) {
 
-    const computerChoice = '4';
+    const computerChoice = getComputerChoice();
 
     console.log("User chose: " + userChoice);
     console.log("Computer chose: " + computerChoice);
