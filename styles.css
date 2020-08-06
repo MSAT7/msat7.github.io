@@ -6,13 +6,13 @@
 }
 
 footer>h3 {
-    color: #000000;
+    color: #ffffff;
     text-align: center;
     font-family: Asap, sans-serif;
 }
 
 footer>h5 {
-    color: #000000;
+    color: #ffffff;
     text-align: center;
     font-family: Asap, sans-serif;
 }
@@ -128,8 +128,8 @@ footer>h5 {
     /* Some padding */
     text-align: center;
     font-family: Asap, sans-serif;
-    color: white;
+    color: black;
     /* Center text*/
-    background: #000000;
-    /* Black background */
+    background: #ffffff;
+    /* White background */
 }
